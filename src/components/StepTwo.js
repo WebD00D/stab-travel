@@ -5,7 +5,7 @@ import TextInput from "./TextInput";
 import OptionList from "./OptionList";
 import TravelButton from "./Button";
 
-class StepOne extends Component {
+class StepTwo extends Component {
   constructor(props) {
     super(props);
 
@@ -42,34 +42,29 @@ class StepOne extends Component {
   }
 
   render() {
+
+    console.log(this.state.responses)
     return (
       <div className="stab-travel__step">
         <TextInput
-          setAnswer={val => this._setStepAnswers("name", val)}
-          labelText="Your name, please."
+          setAnswer={val => this._setStepAnswers("resort charter or hotel", val)}
+          labelText="NAME OF RESORT / BOAT CHARTER / HOTEL"
           type="text"
         />
         <TextInput
-          setAnswer={val => this._setStepAnswers("email", val)}
-          labelText="Email Address"
+          setAnswer={val => this._setStepAnswers("location", val)}
+          labelText="Where was it?"
           type="text"
         />
         <TextInput
-          setAnswer={val => this._setStepAnswers("age", val)}
-          labelText="Your age"
-          type="number"
+          setAnswer={val => this._setStepAnswers("when and how long", val)}
+          labelText="When, and how long did you stay?"
+          type="text"
         />
-        <OptionList
-          labelText="Skill level"
-          name="skill-level"
-          list={[
-            "Beginner ( < 1 year )",
-            "Competent ( surfing for several years )",
-            "Pretty good ( long time keen surfer ) ",
-            "Advanced ( surfing consistently for 10+ years )",
-            "Ripping"
-          ]}
-          setAnswer={val => this._setStepAnswers("skill", val)}
+        <TextInput
+          setAnswer={val => this._setStepAnswers("waves", val)}
+          labelText="Descrive the waves you surfed"
+          type="text"
         />
         <TravelButton
           buttonText="Continue"
@@ -82,4 +77,4 @@ class StepOne extends Component {
   }
 }
 
-export default StepOne;
+export default StepTwo;

@@ -10,8 +10,8 @@ class TextInput extends Component {
   render() {
     return (
       <div className="stab-travel__input">
-        <label>Lorem ipsum dolar set amit?</label>
-        <input type="text" />
+        <label>{this.props.labelText}</label>
+        <input type={this.props.type} onChange={ (e) => this.props.setAnswer(e.target.value) }  />
       </div>
     )
   }

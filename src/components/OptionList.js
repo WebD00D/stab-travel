@@ -8,40 +8,30 @@ class OptionList extends Component {
   }
 
   render() {
+
+    const listName = this.props.name;
+    let options = this.props.list.map(function(item,i){
+
+      return (
+        <div key={i}>
+          <input
+            type="radio"
+            id={item}
+            name={listName}
+            onChange={ () => this.props.setAnswer(item) }
+          />
+          <label className="stab-travel-radio-label" htmlFor={item}>
+            {item}
+          </label>
+        </div>
+      )
+
+    }.bind(this))
+
     return (
       <div className="stab-travel__input">
-        <label>Lorem ipsum dolar set amit?</label>
-        <div >
-            <input
-              type="radio"
-              id="opt1"
-              name="radio-group"
-            />
-            <label className="stab-travel-radio-label" htmlFor="opt1">
-              Option One
-            </label>
-          </div>
-          <div>
-            <input
-              type="radio"
-              id="opt2"
-              name="radio-group"
-            />
-            <label className="stab-travel-radio-label" htmlFor="opt2">
-              Option Two
-            </label>
-          </div>
-
-          <div>
-            <input
-              type="radio"
-              id="opt3"
-              name="radio-group"
-            />
-            <label className="stab-travel-radio-label" htmlFor="opt3">
-              Option Three
-            </label>
-          </div>
+        <label>{this.props.labelText}</label>
+        <div style={{marginTop: '14px'}}>{options}</div>
       </div>
     )
   }

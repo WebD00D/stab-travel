@@ -1,4 +1,3 @@
-
 import React, { Component } from "react";
 import cx from "classnames";
 import "../App.css";
@@ -10,8 +9,13 @@ class TravelButton extends Component {
 
   render() {
     return (
-      <button className="stab-travel__button">Continue</button>
-    )
+      <button
+        onClick={() => this.props.handleClick()}
+        className="stab-travel__button"
+      >
+        {this.props.buttonText}
+      </button>
+    );
   }
 }
 

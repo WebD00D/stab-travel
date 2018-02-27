@@ -6,7 +6,6 @@
 
 }
 
-
 .stab-travel {
 
   margin-top: 100px; /* REMOVE WHEN WE BUILD */
@@ -17,7 +16,7 @@
 }
 
 .stab-travel__steps {
-
+  margin-bottom: 48px;
 }
 
 .stab-travel__steps__indicators {
@@ -53,6 +52,7 @@
 .stab-travel__input {
   display: flex;
   flex-direction: column;
+  margin-bottom: 22px;
 }
 
 .stab-travel__input label {
@@ -187,4 +187,17 @@
 
 .stab-travel__item-tag img:hover {
   cursor: pointer;
+}
+
+
+.stab-travel__step {
+
+}
+
+.stab-travel__error {
+  margin-top: 22px;
+  margin-bottom: 22px;
+  color: red;
+  text-transform: uppercase;
+  font-weight: bold;
 }

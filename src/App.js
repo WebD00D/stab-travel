@@ -8,20 +8,72 @@ import TextInput from "./components/TextInput";
 import TravelButton from "./components/Button";
 import ItemTag from "./components/ItemTag";
 
+import StepOne from "./components/StepOne";
+import StepTwo from "./components/StepTwo";
+
 class App extends Component {
   constructor(props) {
     super(props);
 
     this._handleStepChange = this._handleStepChange.bind(this);
+    this._setAnswers = this._setAnswers.bind(this);
+    this._validateFields = this._validateFields.bind(this);
 
     this.state = {
-      currentStep: 1,
+      currentStep: 2,
       totalSteps: 3,
       stepTitle: "Tell us more about you",
       stepOneCompleted: false,
       stepTwoCompleted: false,
-      stepThreeCompleted: false
+      stepThreeCompleted: false,
+      errors: false,
+      errorMessage: "",
+
+      // STEP ONE ANSWERS
+      stepOneAnswers: []
     };
+  }
+
+  _validateFields(fields, amount) {
+    console.log(!fields.length === amount);
+    if (fields.length != amount) {
+      return false;
+    }
+
+    let hasEmptyFields = false;
+    fields.forEach(function(item) {
+      if (item.answer.trim() === "") {
+        hasEmptyFields = true;
+      }
+    });
+
+    if (hasEmptyFields) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+
+  _setAnswers(answers, fieldCount, nextText) {
+    if (!this._validateFields(answers, fieldCount)) {
+      this.setState({
+        errors: true,
+        errorMessage: "Please complete all fields"
+      });
+      return;
+    } else {
+      this.setState({
+        errors: false,
+        currentStep: this.state.currentStep + 1,
+        stepTitle: nextText
+      });
+    }
+
+    console.log(answers);
+    this.setState({
+      stepOneAnswers: answers
+    });
   }
 
   _handleStepChange(stepToGoTo) {
@@ -35,62 +87,37 @@ class App extends Component {
   render() {
     return (
       <div className="stab-travel">
-        <div className="component-wrap">
-          <div style={{ marginBottom: "22px" }}>
-            <code>Step Indicators</code>
-          </div>
+        <StepIndicator
+          currentStep={this.state.currentStep}
+          totalSteps={this.state.totalSteps}
+          stepTitle={this.state.stepTitle}
+          stepOneCompleted={this.state.stepOneCompleted}
+          stepTwoCompleted={this.state.stepTwoCompleted}
+          stepThreeCompleted={this.state.stepThreeCompleted}
+          handleStepChange={step => this._handleStepChange(step)}
+        />
 
-          <StepIndicator
-            currentStep={this.state.currentStep}
-            totalSteps={this.state.totalSteps}
-            stepTitle={this.state.stepTitle}
-            stepOneCompleted={this.state.stepOneCompleted}
-            stepTwoCompleted={this.state.stepTwoCompleted}
-            stepThreeCompleted={this.state.stepThreeCompleted}
-            handleStepChange={step => this._handleStepChange(step)}
+        {this.state.currentStep === 1 ? (
+          <StepOne
+            setStepResponses={answers => this._setAnswers(answers, 4, "Give us the Scoop")}
           />
-        </div>{" "}
-        {/* END STEP INDICATOR WRAP.. */}
-        <div className="component-wrap">
-          <div style={{ marginBottom: "22px" }}>
-            <code>Input</code>
-          </div>
+        ) : (
+          ""
+        )}
 
-          <TextInput />
-        </div>{" "}
-        {/* END TEXT INPUT WRAP.. */}
-        <div className="component-wrap">
-          <div style={{ marginBottom: "22px" }}>
-            <code>Radios</code>
-          </div>
+        {this.state.currentStep === 2 ? (
+          <StepTwo
+            setStepResponses={answers => this._setAnswers(answers, 4, "Give us the Scoop")}
+          />
+        ) : (
+          ""
+        )}
 
-          <OptionList />
-        </div>{" "}
-        {/* END RADIO  WRAP.. */}
-        <div className="component-wrap">
-          <div style={{ marginBottom: "22px" }}>
-            <code>Button</code>
-          </div>
-          <TravelButton />
-        </div>{" "}
-        {/* END BUTTON WRAP.. */}
-        <div className="component-wrap">
-          <div style={{ marginBottom: "22px" }}>
-            <code>Item Tags</code>
-          </div>
-          <div className="item-tags">
-            <ItemTag text={`5'8" Rusty Dwart`} />
-            <ItemTag text={`5'10" Pyzel Ghost`} />
-            <ItemTag text={`6'1" Pyzel Ghost`} />
-          </div>
-        </div>{" "}
-        {/* END ITEMS TAGS WRAP.. */}
-        <div className="component-wrap">
-          <div style={{ marginBottom: "22px" }}>
-            <code>Photos</code>
-          </div>
-        </div>{" "}
-        {/* END PHOTO WRAP.. */}
+        {this.state.errors ? (
+          <div className="stab-travel__error">{this.state.errorMessage}</div>
+        ) : (
+          ""
+        )}
       </div>
     );
   }
