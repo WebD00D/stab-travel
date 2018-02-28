@@ -66,6 +66,52 @@ class StepTwo extends Component {
           labelText="Descrive the waves you surfed"
           type="text"
         />
+        <TextInput
+          setAnswer={val => this._setStepAnswers("boards they took", val)}
+          labelText="What boards did you take?"
+          type="text"
+        />
+        <TextInput
+          setAnswer={val => this._setStepAnswers("boards they wish they took", val)}
+          labelText="What boards do you wish you had taken?"
+          type="text"
+        />
+        <TextInput
+          setAnswer={val => this._setStepAnswers("food", val)}
+          labelText="How was the food?"
+          type="text"
+        />
+        <TextInput
+          setAnswer={val => this._setStepAnswers("lodging", val)}
+          labelText="How was lodging?"
+          type="text"
+        />
+        <TextInput
+          setAnswer={val => this._setStepAnswers("water temp", val)}
+          labelText="Water temp? What did you wear most days"
+          type="text"
+        />
+        <TextInput
+          setAnswer={val => this._setStepAnswers("tough to get to", val)}
+          labelText="Was it tough to get to?"
+          type="text"
+        />
+        <TextInput
+          setAnswer={val => this._setStepAnswers("expenses", val)}
+          labelText="What did you spend?"
+          type="text"
+        />
+        <TextInput
+          setAnswer={val => this._setStepAnswers("liked most", val)}
+          labelText="What did you like most about it?"
+          type="text"
+        />
+        <TextInput
+          setAnswer={val => this._setStepAnswers("least liked", val)}
+          labelText="Anything you didn't like?"
+          type="text"
+        />
+
         <TravelButton
           buttonText="Continue"
           handleClick={() =>

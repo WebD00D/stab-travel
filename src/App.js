@@ -10,6 +10,7 @@ import ItemTag from "./components/ItemTag";
 
 import StepOne from "./components/StepOne";
 import StepTwo from "./components/StepTwo";
+import StepThree from "./components/StepThree";
 
 class App extends Component {
   constructor(props) {
@@ -20,7 +21,7 @@ class App extends Component {
     this._validateFields = this._validateFields.bind(this);
 
     this.state = {
-      currentStep: 2,
+      currentStep: 3,
       totalSteps: 3,
       stepTitle: "Tell us more about you",
       stepOneCompleted: false,
@@ -30,7 +31,9 @@ class App extends Component {
       errorMessage: "",
 
       // STEP ONE ANSWERS
-      stepOneAnswers: []
+      stepOneAnswers: [],
+      stepTwoAnswers: [],
+      stepThreeAnswers: [],
     };
   }
 
@@ -56,24 +59,53 @@ class App extends Component {
 
 
   _setAnswers(answers, fieldCount, nextText) {
-    if (!this._validateFields(answers, fieldCount)) {
-      this.setState({
-        errors: true,
-        errorMessage: "Please complete all fields"
-      });
-      return;
+
+    if ( this.state.currentStep != 3 ) { // we don't require step 3 photos..
+      if (!this._validateFields(answers, fieldCount)) {
+        this.setState({
+          errors: true,
+          errorMessage: "Please complete all fields"
+        });
+        return;
+      } else {
+        this.setState({
+          errors: false,
+          currentStep: this.state.currentStep + 1,
+          stepTitle: nextText
+        });
+      }
     } else {
       this.setState({
-        errors: false,
         currentStep: this.state.currentStep + 1,
-        stepTitle: nextText
       });
     }
 
+
+
     console.log(answers);
-    this.setState({
-      stepOneAnswers: answers
-    });
+
+
+    switch (this.state.currentStep) {
+      case 1:
+      this.setState({
+        stepOneAnswers: answers
+      })
+        break;
+      case 2:
+      this.setState({
+        stepTwoAnswers: answers
+      })
+        break;
+      case 3:
+      this.setState({
+        stepThreeAnswers: answers
+      })
+        break;
+      default:
+
+    }
+
+
   }
 
   _handleStepChange(stepToGoTo) {
@@ -85,6 +117,9 @@ class App extends Component {
   }
 
   render() {
+
+    console.log("APP STATE", this.state)
+
     return (
       <div className="stab-travel">
         <StepIndicator
@@ -107,8 +142,14 @@ class App extends Component {
 
         {this.state.currentStep === 2 ? (
           <StepTwo
-            setStepResponses={answers => this._setAnswers(answers, 4, "Give us the Scoop")}
+            setStepResponses={answers => this._setAnswers(answers, 13, "Share some Photos")}
           />
+        ) : (
+          ""
+        )}
+
+        {this.state.currentStep === 3 ? (
+          <StepThree />
         ) : (
           ""
         )}
