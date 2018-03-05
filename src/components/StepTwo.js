@@ -43,13 +43,17 @@ class StepTwo extends Component {
 
   render() {
 
-    console.log(this.state.responses)
+    console.log("app state step 2", this.props.appState)
+
+
+
     return (
-      <div className="stab-travel__step">
+      <div className={cx('stab-travel__step', { 'd-none': this.props.hidden})}>
         <TextInput
           setAnswer={val => this._setStepAnswers("resort charter or hotel", val)}
           labelText="NAME OF RESORT / BOAT CHARTER / HOTEL"
           type="text"
+          ref="step2_resort"
         />
         <TextInput
           setAnswer={val => this._setStepAnswers("location", val)}
@@ -63,7 +67,7 @@ class StepTwo extends Component {
         />
         <TextInput
           setAnswer={val => this._setStepAnswers("waves", val)}
-          labelText="Descrive the waves you surfed"
+          labelText="Describe the waves you surfed"
           type="text"
         />
         <TextInput
@@ -109,6 +113,16 @@ class StepTwo extends Component {
         <TextInput
           setAnswer={val => this._setStepAnswers("least liked", val)}
           labelText="Anything you didn't like?"
+          type="text"
+        />
+        <TextInput
+          setAnswer={val => this._setStepAnswers("family / spouse friendly", val)}
+          labelText="Family / spouse friendly ?"
+          type="text"
+        />
+        <TextInput
+          setAnswer={val => this._setStepAnswers("crime / safety", val)}
+          labelText="Crime and safety"
           type="text"
         />
 

@@ -34,7 +34,10 @@ class StepIndicator extends Component {
     return (
       <div className="stab-travel__steps">
         <div className="stab-travel__steps-label">
-          Step {this.props.currentStep} of {this.props.totalSteps}
+          { this.props.currentStep === 4 ? <span>All done</span> : 
+              <span>Step {this.props.currentStep} of {this.props.totalSteps}</span>
+          }
+
         </div>
         <div className="stab-travel__steps__indicators">{indicators}</div>
         <div className="stab-travel__steps__title">{this.props.stepTitle}</div>

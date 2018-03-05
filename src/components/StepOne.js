@@ -43,7 +43,9 @@ class StepOne extends Component {
 
   render() {
     return (
-      <div className="stab-travel__step">
+       // => 'foo bar baz quux'
+
+      <div className={cx('stab-travel__step', { 'd-none': this.props.hidden})}>
         <TextInput
           setAnswer={val => this._setStepAnswers("name", val)}
           labelText="Your name, please."

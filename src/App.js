@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import logo from "./logo.svg";
 import "./App.css";
+import fire from "./database";
+import cx from "classnames";
 
 import StepIndicator from "./components/StepIndicator";
 import OptionList from "./components/OptionList";
@@ -11,6 +13,7 @@ import ItemTag from "./components/ItemTag";
 import StepOne from "./components/StepOne";
 import StepTwo from "./components/StepTwo";
 import StepThree from "./components/StepThree";
+import Review from "./components/Review";
 
 class App extends Component {
   constructor(props) {
@@ -19,9 +22,10 @@ class App extends Component {
     this._handleStepChange = this._handleStepChange.bind(this);
     this._setAnswers = this._setAnswers.bind(this);
     this._validateFields = this._validateFields.bind(this);
+    this._setPhotos = this._setPhotos.bind(this);
 
     this.state = {
-      currentStep: 3,
+      currentStep: 1,
       totalSteps: 3,
       stepTitle: "Tell us more about you",
       stepOneCompleted: false,
@@ -31,9 +35,18 @@ class App extends Component {
       errorMessage: "",
 
       // STEP ONE ANSWERS
-      stepOneAnswers: [],
+      stepOneAnswers: [
+        { question: "name", answer: "Christian" },
+        { question: "email", answer: "rva.christian91@mail.com" }
+      ],
       stepTwoAnswers: [],
       stepThreeAnswers: [],
+
+      photoOne: "",
+      photoTwo: "",
+      photoThree: "",
+      photoFour: "",
+      photoFive: ""
     };
   }
 
@@ -57,10 +70,9 @@ class App extends Component {
     }
   }
 
-
   _setAnswers(answers, fieldCount, nextText) {
-
-    if ( this.state.currentStep != 3 ) { // we don't require step 3 photos..
+    if (this.state.currentStep != 3) {
+      // we don't require step 3 photos..
       if (!this._validateFields(answers, fieldCount)) {
         this.setState({
           errors: true,
@@ -76,36 +88,42 @@ class App extends Component {
       }
     } else {
       this.setState({
-        currentStep: this.state.currentStep + 1,
+        currentStep: this.state.currentStep + 1
       });
     }
 
-
-
-    console.log(answers);
-
-
     switch (this.state.currentStep) {
       case 1:
-      this.setState({
-        stepOneAnswers: answers
-      })
+        this.setState({
+          stepOneAnswers: answers
+        });
         break;
       case 2:
-      this.setState({
-        stepTwoAnswers: answers
-      })
+        this.setState({
+          stepTwoAnswers: answers
+        });
         break;
       case 3:
-      this.setState({
-        stepThreeAnswers: answers
-      })
+        this.setState({
+          stepThreeAnswers: answers
+        });
         break;
       default:
-
     }
+  }
 
+  _setPhotos(p1, p2, p3, p4, p5) {
+    console.log("set photos", p1, p2, p3, p4, p5);
 
+    this.setState({
+      stepTitle: "Review and Submit",
+      currentStep: 4,
+      photoOne: p1,
+      photoTwo: p2,
+      photoThree: p3,
+      photoFour: p4,
+      photoFive: p5
+    });
   }
 
   _handleStepChange(stepToGoTo) {
@@ -117,11 +135,11 @@ class App extends Component {
   }
 
   render() {
-
-    console.log("APP STATE", this.state)
+    console.log("APP STATE", this.state);
 
     return (
       <div className="stab-travel">
+      
         <StepIndicator
           currentStep={this.state.currentStep}
           totalSteps={this.state.totalSteps}
@@ -132,24 +150,33 @@ class App extends Component {
           handleStepChange={step => this._handleStepChange(step)}
         />
 
-        {this.state.currentStep === 1 ? (
-          <StepOne
-            setStepResponses={answers => this._setAnswers(answers, 4, "Give us the Scoop")}
-          />
-        ) : (
-          ""
-        )}
+        <StepOne
+          hidden={this.state.currentStep != 1}
+          setStepResponses={answers =>
+            this._setAnswers(answers, 4, "Give us the Scoop")
+          }
+        />
 
-        {this.state.currentStep === 2 ? (
-          <StepTwo
-            setStepResponses={answers => this._setAnswers(answers, 13, "Share some Photos")}
-          />
-        ) : (
-          ""
-        )}
+        <StepTwo
+          hidden={this.state.currentStep != 2}
+          appState={this.state}
+          setStepResponses={answers =>
+            this._setAnswers(answers, 15, "Share some Photos")
+          }
+        />
 
-        {this.state.currentStep === 3 ? (
-          <StepThree />
+        <StepThree
+          hidden={this.state.currentStep != 3}
+          setPhotos={(p1, p2, p3, p4, p5) =>
+            this._setPhotos(p1, p2, p3, p4, p5)
+          }
+        />
+
+        {this.state.currentStep === 4 ? (
+          <Review
+            editStep={step => this.setState({ currentStep: step })}
+            appState={this.state}
+          />
         ) : (
           ""
         )}
