@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import cx from "classnames";
+import fire from "../database";
 import "../App.css";
 import TextInput from "./TextInput";
 import OptionList from "./OptionList";
@@ -15,16 +16,17 @@ class StepThree extends Component {
 
     this.state = {
       responses: [],
-      photoOnePreview: '',
+      photoOnePreview: "",
       photoOneFile: null,
-      photoTwoPreview: '',
+      photoTwoPreview: "",
       photoTwoFile: null,
-      photoThreePreview: '',
+      photoThreePreview: "",
       photoThreeFile: null,
-      photoFourPreview: '',
+      photoFourPreview: "",
       photoFourFile: null,
-      photoFivePreview: '',
-      photoFiveFile: null
+      photoFivePreview: "",
+      photoFiveFile: null,
+      imageLoading: false,
     };
   }
 
@@ -54,104 +56,302 @@ class StepThree extends Component {
   }
 
   _uploadPhoto(files) {
+    console.log("FILE PREVIEW", files[0].preview);
 
-    console.log(files[0].preview)
+    const dateTime = Date.now();
 
-    if ( this.state.photoOnePreview.trim() == "" ) {
+    this.setState({
+      imageLoading: true
+    })
+
+    if (this.state.photoOnePreview.trim() == "") {
       this.setState({
-        photoOnePreview: files[0].preview,
-        photoOneFile: files[0]
-      })
+        photoOnePreview: files[0].preview
+      });
+
+      const storageRefOne = fire
+        .storage()
+        .ref()
+        .child(`ST-${dateTime}-${files[0].name}`);
+      storageRefOne.put(files[0]).then(
+        function(snapshot) {
+          this.setState({
+            photoOneFile: snapshot.metadata.downloadURLs[0],
+            imageLoading: false
+          });
+        }.bind(this)
+      );
+
       return;
     }
 
-    if ( this.state.photoTwoPreview.trim() == "" ) {
+    if (this.state.photoTwoPreview.trim() == "") {
       this.setState({
-        photoTwoPreview: files[0].preview,
-        photoTwoFile: files[0]
-      })
+        photoTwoPreview: files[0].preview
+      });
+
+      const storageRefTwo = fire
+        .storage()
+        .ref()
+        .child(`ST-${dateTime}-${files[0].name}`);
+      storageRefTwo.put(files[0]).then(
+        function(snapshot) {
+          this.setState({
+            photoTwoFile: snapshot.metadata.downloadURLs[0],
+            imageLoading: false
+          });
+        }.bind(this)
+      );
+
       return;
     }
 
-    if ( this.state.photoThreePreview.trim() == "" ) {
+    if (this.state.photoThreePreview.trim() == "") {
       this.setState({
-        photoThreePreview: files[0].preview,
-        photoThreeFile: files[0]
-      })
+        photoThreePreview: files[0].preview
+      });
+
+      const storageRefThree = fire
+        .storage()
+        .ref()
+        .child(`ST-${dateTime}-${files[0].name}`);
+      storageRefThree.put(files[0]).then(
+        function(snapshot) {
+          this.setState({
+            photoThreeFile: snapshot.metadata.downloadURLs[0],
+            imageLoading: false
+          });
+        }.bind(this)
+      );
+
       return;
     }
 
-    if ( this.state.photoFourPreview.trim() == "" ) {
+    if (this.state.photoFourPreview.trim() == "") {
       this.setState({
-        photoFourPreview: files[0].preview,
-        photoFourFile: files[0]
-      })
+        photoFourPreview: files[0].preview
+      });
+
+      const storageRefFour = fire
+        .storage()
+        .ref()
+        .child(`ST-${dateTime}-${files[0].name}`);
+      storageRefFour.put(files[0]).then(
+        function(snapshot) {
+          this.setState({
+            photoFourFile: snapshot.metadata.downloadURLs[0],
+            imageLoading: false
+          });
+        }.bind(this)
+      );
       return;
     }
 
-    if ( this.state.photoFivePreview.trim() == "" ) {
+    if (this.state.photoFivePreview.trim() == "") {
       this.setState({
-        photoFivePreview: files[0].preview,
-        photoFiveFile: files[0]
-      })
+        photoFivePreview: files[0].preview
+      });
+
+      const storageRefFive = fire
+        .storage()
+        .ref()
+        .child(`ST-${dateTime}-${files[0].name}`);
+      storageRefFive.put(files[0]).then(
+        function(snapshot) {
+          this.setState({
+            photoFiveFile: snapshot.metadata.downloadURLs[0],
+            imageLoading: false
+          });
+        }.bind(this)
+      );
+
       return;
     }
-
-
   }
 
   render() {
-
     return (
-      <div className={cx('stab-travel__step', { 'd-none': this.props.hidden})}>
+      <div className={cx("stab-travel__step", { "d-none": this.props.hidden })}>
         <div className="stab-travel__photo--row">
           <div className="stab-travel__photo-wrap">
-          <span className="stab-travel__photo-count">1</span>
-            { this.state.photoOnePreview ?
-              <div className="stab-travel__photo-lg stab-travel___photo-bg" style={{backgroundImage: `url(${this.state.photoOnePreview})`}}></div>
-              : <Dropzone onDrop={this._uploadPhoto} className="stab-travel__photo-lg" multiple={false} /> }
+            {this.state.photoOnePreview ? (
+              <span
+                onClick={() => {
+                  this.setState({
+                    photoOnePreview: '',
+                    photoOneFile: null
+                  });
+                }}
+                className="stab-travel__photo-count-remove"
+              >
+                X
+              </span>
+            ) : (
+              <span className="stab-travel__photo-count">1</span>
+            )}
+            {this.state.photoOnePreview ? (
+              <div
+                className="stab-travel__photo-lg stab-travel___photo-bg"
+                style={{
+                  backgroundImage: `url(${this.state.photoOnePreview})`
+                }}
+              />
+            ) : (
+              <Dropzone
+                onDrop={this._uploadPhoto}
+                className="stab-travel__photo-lg"
+                multiple={false}
+              />
+            )}
           </div>
           <div className="stab-travel__small-photo-row">
             <div className="stab-travel-small-photo-half">
               <div className="stab-travel__photo-wrap">
+              {this.state.photoTwoPreview ? (
+                <span
+                  onClick={() => {
+                    this.setState({
+                      photoTwoPreview: '',
+                      photoTwoFile: null
+                    });
+                  }}
+                  className="stab-travel__photo-count-remove"
+                >
+                  X
+                </span>
+              ) : (
                 <span className="stab-travel__photo-count">2</span>
-                { this.state.photoTwoPreview ?
-                  <div className="stab-travel__photo-sm stab-travel___photo-bg" style={{backgroundImage: `url(${this.state.photoTwoPreview})`}}></div>
-                  : <Dropzone onDrop={this._uploadPhoto} className="stab-travel__photo-sm" multiple={false} /> }
+              )}
+                {this.state.photoTwoPreview ? (
+                  <div
+                    className="stab-travel__photo-sm stab-travel___photo-bg"
+                    style={{
+                      backgroundImage: `url(${this.state.photoTwoPreview})`
+                    }}
+                  />
+                ) : (
+                  <Dropzone
+                    onDrop={this._uploadPhoto}
+                    className="stab-travel__photo-sm"
+                    multiple={false}
+                  />
+                )}
               </div>
               <div className="stab-travel__photo-wrap">
+              {this.state.photoThreePreview ? (
+                <span
+                  onClick={() => {
+                    this.setState({
+                      photoThreePreview: '',
+                      photoThreeFile: null
+                    });
+                  }}
+                  className="stab-travel__photo-count-remove"
+                >
+                  X
+                </span>
+              ) : (
                 <span className="stab-travel__photo-count">3</span>
-                { this.state.photoThreePreview ?
-                  <div className="stab-travel__photo-sm stab-travel___photo-bg" style={{backgroundImage: `url(${this.state.photoThreePreview})`}}></div>
-                  : <Dropzone onDrop={this._uploadPhoto} className="stab-travel__photo-sm" multiple={false} /> }
+              )}
+                {this.state.photoThreePreview ? (
+                  <div
+                    className="stab-travel__photo-sm stab-travel___photo-bg"
+                    style={{
+                      backgroundImage: `url(${this.state.photoThreePreview})`
+                    }}
+                  />
+                ) : (
+                  <Dropzone
+                    onDrop={this._uploadPhoto}
+                    className="stab-travel__photo-sm"
+                    multiple={false}
+                  />
+                )}
               </div>
             </div>
             <div className="stab-travel-small-photo-half">
               <div className="stab-travel__photo-wrap">
+              {this.state.photoFourPreview ? (
+                <span
+                  onClick={() => {
+                    this.setState({
+                      photoFourPreview: '',
+                      photoFourFile: null
+                    });
+                  }}
+                  className="stab-travel__photo-count-remove"
+                >
+                  X
+                </span>
+              ) : (
                 <span className="stab-travel__photo-count">4</span>
-                { this.state.photoFourPreview ?
-                  <div className="stab-travel__photo-sm stab-travel___photo-bg" style={{backgroundImage: `url(${this.state.photoFourPreview})`}}></div>
-                  : <Dropzone onDrop={this._uploadPhoto} className="stab-travel__photo-sm" multiple={false} /> }
+              )}
+                {this.state.photoFourPreview ? (
+                  <div
+                    className="stab-travel__photo-sm stab-travel___photo-bg"
+                    style={{
+                      backgroundImage: `url(${this.state.photoFourPreview})`
+                    }}
+                  />
+                ) : (
+                  <Dropzone
+                    onDrop={this._uploadPhoto}
+                    className="stab-travel__photo-sm"
+                    multiple={false}
+                  />
+                )}
               </div>
               <div className="stab-travel__photo-wrap">
+              {this.state.photoFivePreview ? (
+                <span
+                  onClick={() => {
+                    this.setState({
+                      photoFivePreview: '',
+                      photoFiveFile: null
+                    });
+                  }}
+                  className="stab-travel__photo-count-remove"
+                >
+                  X
+                </span>
+              ) : (
                 <span className="stab-travel__photo-count">5</span>
-                { this.state.photoFivePreview ?
-                  <div className="stab-travel__photo-sm stab-travel___photo-bg" style={{backgroundImage: `url(${this.state.photoFivePreview})`}}></div>
-                  : <Dropzone onDrop={this._uploadPhoto} className="stab-travel__photo-sm" multiple={false} /> }
+              )}
+                {this.state.photoFivePreview ? (
+                  <div
+                    className="stab-travel__photo-sm stab-travel___photo-bg"
+                    style={{
+                      backgroundImage: `url(${this.state.photoFivePreview})`
+                    }}
+                  />
+                ) : (
+                  <Dropzone
+                    onDrop={this._uploadPhoto}
+                    className="stab-travel__photo-sm"
+                    multiple={false}
+                  />
+                )}
               </div>
             </div>
           </div>
         </div>
 
         <TravelButton
-          buttonText="Review"
-          handleClick={() => this.props.setPhotos(
-            this.state.photoOneFile,
-            this.state.photoTwoFile,
-            this.state.photoThreeFile,
-            this.state.photoFourFile,
-            this.state.photoFiveFile
-          )}
+          buttonText={ this.state.imageLoading  ? "Loading..." : "Continue" }
+          handleClick={() =>
+            {
+              if ( !this.state.imageLoading  ) {
+                this.props.setPhotos(
+                  this.state.photoOneFile,
+                  this.state.photoTwoFile,
+                  this.state.photoThreeFile,
+                  this.state.photoFourFile,
+                  this.state.photoFiveFile
+                )
+              }
+            }
+
+          }
         />
       </div>
     );

@@ -48,8 +48,11 @@ class Review extends Component {
       }.bind(this)
     );
 
+    console.log("REVIEW APP STATE", this.props.appState)
+
     return (
-      <div className="stab-travel__steps">
+
+      <div className={cx("stab-travel__step", { "d-none": this.props.hidden })}>
         <h3>
           ABOUT YOU{" "}
           <small onClick={() => this.props.editStep(1)} className="edit-link">
@@ -75,8 +78,8 @@ class Review extends Component {
 
         {this.props.appState.photoOne ? (
           <img
-            style={{ maxHeight: "150px", display: "block" }}
-            src={this.props.appState.photoOne.preview}
+            style={{ maxHeight: "150px", marginBottom: "18px", display: "block" }}
+            src={this.props.appState.photoOne}
           />
         ) : (
           ""
@@ -84,8 +87,8 @@ class Review extends Component {
 
         {this.props.appState.photoTwo ? (
           <img
-            style={{ maxHeight: "150px", display: "block" }}
-            src={this.props.appState.photoTwo.preview}
+            style={{ maxHeight: "150px", marginBottom: "18px", display: "block" }}
+            src={this.props.appState.photoTwo}
           />
         ) : (
           ""
@@ -93,8 +96,8 @@ class Review extends Component {
 
         {this.props.appState.photoThree ? (
           <img
-            style={{ maxHeight: "150px", display: "block" }}
-            src={this.props.appState.photoThree.preview}
+            style={{ maxHeight: "150px", marginBottom: "18px", display: "block" }}
+            src={this.props.appState.photoThree}
           />
         ) : (
           ""
@@ -102,8 +105,8 @@ class Review extends Component {
 
         {this.props.appState.photoFour ? (
           <img
-            style={{ maxHeight: "150px", display: "block" }}
-            src={this.props.appState.photoFour.preview}
+            style={{ maxHeight: "150px", marginBottom: "18px", display: "block" }}
+            src={this.props.appState.photoFour}
           />
         ) : (
           ""
@@ -111,15 +114,16 @@ class Review extends Component {
 
         {this.props.appState.photoFive ? (
           <img
-            style={{ maxHeight: "150px", display: "block" }}
-            src={this.props.appState.photoFive.preview}
+            style={{ maxHeight: "150px", marginBottom: "18px", display: "block" }}
+            src={this.props.appState.photoFive}
           />
         ) : (
           ""
         )}
 
-
-        <TravelButton buttonText="Submit" />
+        <TravelButton
+          handleClick={ () => this.props.submitForm() }
+          buttonText="Submit" />
       </div>
     );
   }

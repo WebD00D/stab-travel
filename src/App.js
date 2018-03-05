@@ -23,6 +23,8 @@ class App extends Component {
     this._setAnswers = this._setAnswers.bind(this);
     this._validateFields = this._validateFields.bind(this);
     this._setPhotos = this._setPhotos.bind(this);
+    this._submitGuide = this._submitGuide.bind(this);
+
 
     this.state = {
       currentStep: 1,
@@ -35,10 +37,7 @@ class App extends Component {
       errorMessage: "",
 
       // STEP ONE ANSWERS
-      stepOneAnswers: [
-        { question: "name", answer: "Christian" },
-        { question: "email", answer: "rva.christian91@mail.com" }
-      ],
+      stepOneAnswers: [],
       stepTwoAnswers: [],
       stepThreeAnswers: [],
 
@@ -46,12 +45,41 @@ class App extends Component {
       photoTwo: "",
       photoThree: "",
       photoFour: "",
-      photoFive: ""
+      photoFive: "",
+
+      submitted: false
     };
   }
 
+
+
+  _submitGuide() {
+
+    const dateTime = Date.now();
+
+    fire
+      .database()
+      .ref(`submissions/${dateTime}`)
+      .set({
+        submittedOn: Date.now(),
+        stepOneAnswers: this.state.stepOneAnswers,
+        stepTwoAnswers: this.state.stepTwoAnswers,
+        photoOne: this.state.photoOne,
+        photoTwo: this.state.photoTwo,
+        photoThree: this.state.photoThree,
+        photoFour: this.state.photoFour,
+        photoFive: this.state.photoFive
+      });
+
+      this.setState({
+        submitted: true,
+        currentStep: 5
+      })
+
+  }
+
   _validateFields(fields, amount) {
-    console.log(!fields.length === amount);
+
     if (fields.length != amount) {
       return false;
     }
@@ -135,11 +163,11 @@ class App extends Component {
   }
 
   render() {
-    console.log("APP STATE", this.state);
+
 
     return (
       <div className="stab-travel">
-      
+
         <StepIndicator
           currentStep={this.state.currentStep}
           totalSteps={this.state.totalSteps}
@@ -172,14 +200,18 @@ class App extends Component {
           }
         />
 
-        {this.state.currentStep === 4 ? (
-          <Review
-            editStep={step => this.setState({ currentStep: step })}
-            appState={this.state}
-          />
-        ) : (
-          ""
-        )}
+        <Review
+          hidden={this.state.currentStep != 4 && !this.state.submitted}
+          submitForm={ () => this._submitGuide() }
+          editStep={step => this.setState({ currentStep: step })}
+          appState={this.state}
+        />
+
+        { this.state.submitted ?
+          <div className="stab-travel__step">
+            <h3>THANKS!</h3>
+            <div>Your guide has been submitted and will be reviewed by our staff</div>
+          </div> : "" }
 
         {this.state.errors ? (
           <div className="stab-travel__error">{this.state.errorMessage}</div>
