@@ -45,8 +45,6 @@ class StepTwo extends Component {
 
     console.log("app state step 2", this.props.appState)
 
-
-
     return (
       <div className={cx('stab-travel__step', { 'd-none': this.props.hidden})}>
         <TextInput
@@ -56,7 +54,9 @@ class StepTwo extends Component {
           ref="step2_resort"
         />
         <TextInput
+          specificField={true}
           setAnswer={val => this._setStepAnswers("location", val)}
+          setSpecificFild={val => this.props.setLocation(val)}
           labelText="Where was it?"
           type="text"
         />

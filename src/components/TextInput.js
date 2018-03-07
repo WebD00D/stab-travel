@@ -16,6 +16,11 @@ class TextInput extends Component {
           type={this.props.type}
           onChange={e => {
             this.props.setAnswer(e.target.value);
+
+            if ( this.props.specificField ) {
+              this.props.setSpecificFild(e.target.value)
+            }
+
           }}
 
         />

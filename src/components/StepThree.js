@@ -170,6 +170,7 @@ class StepThree extends Component {
   }
 
   render() {
+    
     return (
       <div className={cx("stab-travel__step", { "d-none": this.props.hidden })}>
         <div className="stab-travel__photo--row">

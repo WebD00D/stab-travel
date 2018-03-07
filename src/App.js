@@ -25,10 +25,11 @@ class App extends Component {
     this._setPhotos = this._setPhotos.bind(this);
     this._submitGuide = this._submitGuide.bind(this);
 
-
     this.state = {
       currentStep: 1,
       totalSteps: 3,
+      name: "",
+      location: "",
       stepTitle: "Tell us more about you",
       stepOneCompleted: false,
       stepTwoCompleted: false,
@@ -51,10 +52,7 @@ class App extends Component {
     };
   }
 
-
-
   _submitGuide() {
-
     const dateTime = Date.now();
 
     fire
@@ -62,24 +60,34 @@ class App extends Component {
       .ref(`submissions/${dateTime}`)
       .set({
         submittedOn: Date.now(),
+        name: this.state.name,
+        location: this.state.location,
         stepOneAnswers: this.state.stepOneAnswers,
         stepTwoAnswers: this.state.stepTwoAnswers,
         photoOne: this.state.photoOne,
         photoTwo: this.state.photoTwo,
         photoThree: this.state.photoThree,
         photoFour: this.state.photoFour,
-        photoFive: this.state.photoFive
+        photoFive: this.state.photoFive,
+        read: false,
+        active: false,
+        published: false
       });
 
-      this.setState({
-        submitted: true,
-        currentStep: 5
-      })
+    this.setState({
+      submitted: true,
+      currentStep: 5
+    });
 
+    fetch(
+      `https://stabnewsletter-api.herokuapp.com/send-travel-guide-notification`)
+      .then(function(response) {
+        return response.json();
+      })
+      .then(function(r) {});
   }
 
   _validateFields(fields, amount) {
-
     if (fields.length != amount) {
       return false;
     }
@@ -163,11 +171,8 @@ class App extends Component {
   }
 
   render() {
-
-
     return (
       <div className="stab-travel">
-
         <StepIndicator
           currentStep={this.state.currentStep}
           totalSteps={this.state.totalSteps}
@@ -183,6 +188,11 @@ class App extends Component {
           setStepResponses={answers =>
             this._setAnswers(answers, 4, "Give us the Scoop")
           }
+          setName={val =>
+            this.setState({
+              name: val
+            })
+          }
         />
 
         <StepTwo
@@ -190,6 +200,11 @@ class App extends Component {
           appState={this.state}
           setStepResponses={answers =>
             this._setAnswers(answers, 15, "Share some Photos")
+          }
+          setLocation={val =>
+            this.setState({
+              location: val
+            })
           }
         />
 
@@ -201,17 +216,22 @@ class App extends Component {
         />
 
         <Review
-          hidden={this.state.currentStep != 4 && !this.state.submitted}
-          submitForm={ () => this._submitGuide() }
+          hidden={this.state.currentStep != 4}
+          submitForm={() => this._submitGuide()}
           editStep={step => this.setState({ currentStep: step })}
           appState={this.state}
         />
 
-        { this.state.submitted ?
+        {this.state.submitted ? (
           <div className="stab-travel__step">
             <h3>THANKS!</h3>
-            <div>Your guide has been submitted and will be reviewed by our staff</div>
-          </div> : "" }
+            <div>
+              Your guide has been submitted and will be reviewed by our staff
+            </div>
+          </div>
+        ) : (
+          ""
+        )}
 
         {this.state.errors ? (
           <div className="stab-travel__error">{this.state.errorMessage}</div>

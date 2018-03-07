@@ -43,11 +43,13 @@ class StepOne extends Component {
 
   render() {
     return (
-       // => 'foo bar baz quux'
+      // => 'foo bar baz quux'
 
-      <div className={cx('stab-travel__step', { 'd-none': this.props.hidden})}>
+      <div className={cx("stab-travel__step", { "d-none": this.props.hidden })}>
         <TextInput
+          specificField={true}
           setAnswer={val => this._setStepAnswers("name", val)}
+          setSpecificFild={val => this.props.setName(val)}
           labelText="Your name, please."
           type="text"
         />
@@ -75,9 +77,7 @@ class StepOne extends Component {
         />
         <TravelButton
           buttonText="Continue"
-          handleClick={() =>
-            this.props.setStepResponses(this.state.responses)
-          }
+          handleClick={() => this.props.setStepResponses(this.state.responses)}
         />
       </div>
     );
