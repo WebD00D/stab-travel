@@ -9,8 +9,8 @@
 .stab-travel {
 
   margin-top: 100px; /* REMOVE WHEN WE BUILD */
-
-  max-width: 600px;
+  max-width: 86.5%;
+  width: 600px;
   margin-left: auto;
   margin-right: auto;
 }
